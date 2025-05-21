@@ -10,7 +10,7 @@ export class AppComponent implements OnInit{
 
   ngOnInit(): void {
    this.maxVueltas = 3000;
-   this.startwith = "00";
+   this.startsWith = "00";
   }
 
   title = 'hash256';
@@ -20,10 +20,9 @@ export class AppComponent implements OnInit{
 
   texto : string;
   textoResultado : string;
-  startwith : string;
-  maxVueltas : Number;
+  startsWith : string;
+  maxVueltas : number;
   mensajeResultado: string;
-  calculoStart : boolean = false;
 
   calcular(){
     this.mensajeResultado = null;
@@ -35,22 +34,18 @@ export class AppComponent implements OnInit{
     for (let index = 0; index < this.maxVueltas; index++) {
       textoAuxiliar = this.texto.replace("{x}", index.toString())
       let resultado = this.sha256(textoAuxiliar);
-      if(resultado.startsWith(this.startwith)){
-        this.mensajeResultado = `Se Necesitarion ${index} vueltas para encontrar el hash`;
+      if(resultado.startsWith(this.startsWith)){
+        this.mensajeResultado = `Se necesitaron ${index} vueltas para encontrar el hash`;
         this.textoResultado = resultado;
         this.texto = this.texto.replace("{x}", index.toString());
         break;
       }
     }
     if(!this.mensajeResultado){
-      this.mensajeResultado = `Despues de ${this.maxVueltas} vueltas no se encontro un hash que empiece con ${this.startwith}`
+      this.mensajeResultado = `Después de ${this.maxVueltas} vueltas no se encontró un hash que empiece con ${this.startsWith}`
       this.textoResultado = "";
       this.texto = this.texto.replace("{x}", "");
     }
-  }
-
-  parar(){
-    this.calculoStart = false;
   }
 
   cambiaTexto(){
@@ -69,7 +64,7 @@ export class AppComponent implements OnInit{
     var result = ''
   
     var words = [];
-    var asciiBitLength = this.texto.length * 8;
+    var asciiBitLength = texto.length * 8;
     
     //* caching results is optional - remove/add slash from front of this line to toggle
     // Initial hash value: first 32 bits of the fractional parts of the square roots of the first 8 primes
@@ -111,7 +106,7 @@ export class AppComponent implements OnInit{
     for (j = 0; j < words.length;) {
       var w = words.slice(j, j += 16); // The message is expanded into 64 words as part of the iteration
       var oldHash = hash;
-      // This is now the undefinedworking hash", often labelled as variables a...g
+      // This is now the "working hash", often labelled as variables a...g
       // (we have to truncate as well, otherwise extra entries at the end accumulate
       hash = hash.slice(0, 8);
       
@@ -124,10 +119,10 @@ export class AppComponent implements OnInit{
         // Iterate
         var a =  hash[0], e =  hash[4];
         var temp1 =  hash[7] + (this.rightRotate(e, 6) ^ this.rightRotate(e, 11) ^ this.rightRotate(e, 25)) + ((e &  hash[5]) ^ ((~e) &  hash[6])) 
-        + k[i] + (w[i] = (i < 16) ? w[i] : ( w[i - 16] + (this.rightRotate(w15, 7) ^ this.rightRotate(w15, 18) ^ (w15>>>3)) + w[i - 7] 
+        + k[i] + (w[i] = (i < 16) ? w[i] : (w[i - 16] + (this.rightRotate(w15, 7) ^ this.rightRotate(w15, 18) ^ (w15>>>3)) + w[i - 7] 
         + (this.rightRotate(w2, 17) ^ this.rightRotate(w2, 19) ^ (w2 >>> 10))) | 0);
 
-        // This is only used once, so *could* be moved below, but it only saves 4 bytes and makes things unreadble
+        // This is only used once, so *could* be moved below, but it only saves 4 bytes and makes things unreadable
         var temp2 = (this.rightRotate(a, 2) ^ this.rightRotate(a, 13) ^ this.rightRotate(a, 22)) // S0
           + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2])); // maj
         
